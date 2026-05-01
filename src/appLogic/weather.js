@@ -1,10 +1,10 @@
+import { spinner } from "../dom/spinner.js"
+
 // this function fetches current location.
-const fetchCurrentLocation = () => {
+export const fetchCurrentLocation = () => {
     return new Promise((resolve, reject) => {
 
         navigator.geolocation.getCurrentPosition((position) => {
-
-            console.log(position.coords.latitude, position.coords.longitude, position.coords.accuracy)
 
             resolve(
               {
@@ -19,30 +19,38 @@ const fetchCurrentLocation = () => {
                 positionError
             );
         }, 
-        {enableHighAccuracy: true, timeout: 15000})
+        {enableHighAccuracy: true, timeout: 10000})
     })
 }
 
 
-const fetchWeatherWithCurrentLocation = async (latitude, longitude) => {
+export const fetchWeatherWithCurrentLocation = async (latitude, longitude) => {
+
+    spinner.loadSpinner()
+
+    console.log(latitude, longitude);
 
     const weather = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${latitude},${longitude}?key=TTDVDB34E28EX6VBQV5WBNAZ2`).then((response) => {
 
         if (!response.ok) {
-            throw new Error("failed to fetch...");
-            return false;
+            throw new Error("failed to fetch..", response.status);
         }
-
         return response.json()
+    }).catch((error) => {
+        console.error(error.message);
+        return false
+    }).finally(() => {
+        spinner.stopSpinner()
     })
-
     return weather;
 };
 
 
-const fetchWeatherWithCityName = async () => {
+export const fetchWeatherWithCityName = async (cityName) => {
 
-    const cityName = prompt('enter the location name')
+    if (!cityName) return;
+
+    spinner.loadSpinner();
 
     const weather = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${cityName}?key=TTDVDB34E28EX6VBQV5WBNAZ2`).then((response) => {
 
@@ -50,30 +58,13 @@ const fetchWeatherWithCityName = async () => {
             throw new Error("failed to fetch...");
         }
         return response.json();
+
     }).catch((error) => {
         console.error(error.message);
         return false;
-
+    }).finally(() => {
+        spinner.stopSpinner()
     })
 
     return weather;
-}
-    
-
-export async function getWeather() {
-
-    const location = await fetchCurrentLocation()
-    .catch((error) => {
-        console.error(`Error Code:${error.code}, ${error.message}`);
-        return false;
-    })
-
-    if (!location) return;
-    
-    if (location.accuracy > 5000) {
-       return await fetchWeatherWithCityName();
-    } else {
-       return await fetchWeatherWithCurrentLocation(location.latitude, location.longitude);
-    }
-    
-}
+};

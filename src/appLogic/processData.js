@@ -1,10 +1,10 @@
-export const processData = async (weatherData) => {
+export const processData = (weatherData) => {
 
-    const myWeatherData = await weatherData()
+    console.log(weatherData);
 
-    if (!myWeatherData) return;
+    if (!weatherData) return;
 
-    const {address, currentConditions, days, description} = myWeatherData;
+    const {address, currentConditions, days, description} = weatherData;
 
     return {
         address,

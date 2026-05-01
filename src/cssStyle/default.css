@@ -1,0 +1,168 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    max-width: 100%;
+    margin: auto;
+    background-color: whitesmoke;
+}
+
+header {
+    background-color: lightblue;
+    padding: 20px;
+}
+
+header nav {
+    max-width: 60%;
+    height: 60px;
+    margin: auto;
+}
+
+.navBar {
+    display: flex;
+    justify-content: center;
+    align-items:end;
+    gap: 60px;
+    margin-top: 10px;
+}
+
+.searchBox {
+    position: relative;
+    width: 60%;
+}
+
+.searchBox .searchBtn {
+    height: 40px;
+    width: 100px;
+    padding-left: 20px;
+    border: none;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    cursor: pointer;
+}
+
+.searchBox .searchBar {
+    display: block;
+    justify-content: center;
+    width: 100%;
+    height: 30px;
+    margin: 0 auto;
+    padding: 20px;
+    border: none;
+    border-radius: 20px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.searchBox {
+    display: flex;
+    justify-content: center;
+    width: 60%;
+    height: 30px; 
+    margin: 0 auto;
+    padding: 20px;
+    border: none;
+    border-radius: 20px;
+}
+
+.navBar button {
+    width: 25%;
+    height: max-content;
+    padding: 10px 0;
+    border: none;
+}
+
+nav .active {
+    border-bottom: 2px solid black;
+}
+
+#content .weatherSummary {
+    position: relative;
+    width: 60%;
+    margin: auto;
+    margin-top: 20px;
+    padding: 20px;
+    height: auto;
+    background-color: white;
+}
+
+.weatherSummary > p {
+    width: 40%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-style: oblique;
+}
+
+.weatherSummary h2 {
+    font-family: cursive;
+    font-weight:bold;
+}
+
+.weatherSummary > * {
+    margin-bottom: 20px;
+}
+
+.weatherSummary img {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 20%;
+}
+
+.weatherSummary > .subSummary {
+    margin-top: 70px;
+}
+
+.weatherSummary .subSummary {
+    width: 100%;
+    background-color: whitesmoke;
+    padding: 20px;
+}
+
+.subSummary p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: large;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+}
+
+.subSummary p {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 20%;
+}
+
+#content .daysDiv,
+#content .hoursDiv {
+    width: 60%;
+    margin: auto;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: white;
+}
+
+#content .daysDiv,
+#content .hoursDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.daysDiv .dayDiv,
+.hoursDiv .hourDiv {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    width: 90%;
+    padding: 15px 20px 15px 20px;
+    margin-bottom: 20px;
+    background-color: whitesmoke;
+}
+
+.dayDiv img,
+.hourDiv img {
+    width: 20%;
+} 
