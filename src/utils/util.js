@@ -9,7 +9,18 @@ export function clearDiv(element) {
 
 export async function loadWeatherIcon(icon) {
 
-    const image = await import(`../image/1st Set - Color/${icon}.svg`)
+    const time = new Date();
+    const now = time.getHours()
+
+    let color;
+
+    if (now <= 8 || now >= 19) {
+        color = '1st Set - Monochrome';
+    } else {
+        color = '1st Set - Color';
+    }
+
+    const image = await import(`../image/${color}/${icon}.svg`)
     .then(icon => icon.default)
     .catch((error) => {
         return "../image/1st Set - Color/cloudy.svg";
@@ -24,11 +35,6 @@ export function myDateFormatter(dateString) {
     return format(myDate, 'EEEE, dd');
 };
 
-export function convertFehToCel(temp) {
-    const tempInCel = (temp - 32) * 5/9;
-
-    return `${tempInCel.toFixed(1)} ${'\u00B0'}C`;
-}
 
 export function filterhours(time) {
 
@@ -40,3 +46,15 @@ export function filterhours(time) {
 };
 
 
+export function switchTempUnit(unit = 'F', value) {
+
+    if (!value) return
+
+    if (unit === 'C') {
+        const temp = (value - 32) * 5/9;
+        return `${temp.toFixed(1)} ${'\u00B0'}C`;
+    } else {
+        const temp = (value * 9/5) + 32;  
+        return `${temp.toFixed(1)} ${'\u00B0'}F`;
+    }
+};

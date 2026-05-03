@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "date-fns": "^4.1.0",
+    "notyf": "^3.10.0",
     "spin.js": "^4.1.2"
   }
 }

@@ -1,4 +1,4 @@
-import { clearDiv, loadWeatherIcon, myDateFormatter, convertFehToCel, filterhours } from "../utils/util.js";
+import { clearDiv, loadWeatherIcon, myDateFormatter, convertFehToCel, filterhours, switchTempUnit } from "../utils/util.js";
 
 export async function renderWeatherData(weather) {
     if (!weather) return;
@@ -14,9 +14,9 @@ export async function renderWeatherData(weather) {
     cityName.textContent = weather.address.toUpperCase();
 
     const condition = document.createElement('h2');
-    condition.className = 'condition';
-    const tempSign = document.createElement('span').innerText = '&deg;'
-    condition.innerHTML = `${weather.currentConditions.temp} ${tempSign}F`;
+    condition.className = 'temp-conditions';
+   
+    condition.innerHTML = `${weather.currentConditions.temp} ${'\u00B0'}F`;
     
     const weatherImage = document.createElement('img');
     weatherImage.className = 'weatherImage';
@@ -87,24 +87,26 @@ export async function renderDailyTemp(days) {
        
         const dayData = [datetime, conditions, temp, icon];
         
-        const myClass = ['date', 'conditions', 'temperature', 'weatherIcon'];
+        const myClass = ['date', 'conditions', 'temp-conditions', 'weatherIcon'];
 
         for (const [index, data] of dayData.entries()) {
-            let dataDiv = document.createElement('p');
 
-            if (index === 3) { 
-                dataDiv = document.createElement('img');
-                console.log(data)
-                dataDiv.src = await loadWeatherIcon(data);
-            }
+            let dataDiv = document.createElement('p');
 
             dataDiv.className = myClass[index];
             dataDiv.textContent = data;
 
-             if (index === 0) {
+            if (index === 0) {
                 dataDiv.textContent = myDateFormatter(data);   
-            } else if (index === 2) {
-                dataDiv.textContent = convertFehToCel(data);
+            } 
+
+            if (index === 2) {
+                dataDiv.textContent = `${data} ${'\u00B0'}F`
+            }
+
+            if (index === 3) { 
+                dataDiv = document.createElement('img');
+                dataDiv.src = await loadWeatherIcon(data);
             }
 
             dayDiv.appendChild(dataDiv)
@@ -147,7 +149,7 @@ export async function renderHourlyTemp(hours) {
 
         const {datetime, conditions, temp, icon} = hour;
         const hourData = [datetime, conditions, temp, icon];
-        const myClass = ['date', 'conditions', 'temperature', 'weatherIcon'];
+        const myClass = ['date', 'conditions', 'temp-conditions', 'weatherIcon'];
 
         for (const [index, data] of hourData.entries()) {
 
@@ -162,7 +164,7 @@ export async function renderHourlyTemp(hours) {
             dataDiv.textContent = data;
 
             if (index === 2) {
-                dataDiv.textContent = convertFehToCel(data);
+                dataDiv.textContent = `${data} ${'\u00B0'}F`    
             }
 
             hourDiv.appendChild(dataDiv);
@@ -171,4 +173,55 @@ export async function renderHourlyTemp(hours) {
         hoursDiv.appendChild(hourDiv);
         contentDiv.appendChild(hoursDiv);
     }
+}
+
+
+export function showActiveNavBtn() {
+
+    const navBtn = document.querySelectorAll('.navBtn')
+    navBtn.forEach((btn) => {
+
+        btn.addEventListener('click', (e) => {
+  
+            navBtn.forEach(button => button.classList.remove('active'))
+
+            const addActiveClass = e.target.closest('.navBtn');
+            if (addActiveClass) {
+                addActiveClass.classList.add('active');
+            }
+        })
+    })
+}
+
+export async function showErrorImage() {
+    const body = document.querySelector('body')
+    const image = document.createElement('img');
+    image.className = 'error';
+
+    const imagePath = await import(`../image/404-error.svg`);
+
+    image.src = await imagePath.default
+
+    body.appendChild(image);
+};
+
+export function addTempUnitChangerElement() {
+
+    const span = document.createElement('span');
+    span.className = 'tempUnit';
+    span.textContent = 'Unit';
+
+    const select = document.createElement('select');
+    const fehrenUnit = document.createElement('option');
+    fehrenUnit.textContent = 'F';
+    select.appendChild(fehrenUnit);
+
+    const tempUnit = document.createElement('option');
+    tempUnit.textContent = 'C';
+    select.appendChild(tempUnit);
+
+    span.appendChild(select);
+
+    const header = document.querySelector('header')
+    header.appendChild(span);
 }

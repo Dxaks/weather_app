@@ -13,20 +13,21 @@ body {
 header {
     background-color: lightblue;
     padding: 20px;
+    border-radius: 1px solid black;
 }
 
 header nav {
     max-width: 60%;
-    height: 60px;
+    height: 100px;
     margin: auto;
 }
 
 .navBar {
     display: flex;
     justify-content: center;
-    align-items:end;
+    align-items:center;
     gap: 60px;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .searchBox {
@@ -68,15 +69,27 @@ header nav {
     border-radius: 20px;
 }
 
-.navBar button {
+.navBtn {
     width: 25%;
     height: max-content;
     padding: 10px 0;
     border: none;
 }
 
-nav .active {
-    border-bottom: 2px solid black;
+.navBar button:hover {
+    background-color: white;
+    cursor: pointer;
+}
+
+.active {
+    border-bottom: 3px solid black;
+}
+
+body .error {
+    display: block;
+    margin: auto;
+    width: 100vw;
+    height: 80vh;
 }
 
 #content .weatherSummary {
@@ -165,4 +178,8 @@ nav .active {
 .dayDiv img,
 .hourDiv img {
     width: 20%;
-} 
+}
+
+header .tempUnit select{
+    margin-left: 10px;
+}

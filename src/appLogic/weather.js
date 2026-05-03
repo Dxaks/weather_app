@@ -1,4 +1,6 @@
+import { notyf } from "../dom/notyf.js"
 import { spinner } from "../dom/spinner.js"
+import { showErrorImage } from "../dom/domFunctions.js"
 
 // this function fetches current location.
 export const fetchCurrentLocation = () => {
@@ -19,7 +21,7 @@ export const fetchCurrentLocation = () => {
                 positionError
             );
         }, 
-        {enableHighAccuracy: true, timeout: 10000})
+        {enableHighAccuracy: true, timeout: 5000})
     })
 }
 
@@ -28,17 +30,17 @@ export const fetchWeatherWithCurrentLocation = async (latitude, longitude) => {
 
     spinner.loadSpinner()
 
-    console.log(latitude, longitude);
+    if (!(latitude || longitude)) return;
 
     const weather = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${latitude},${longitude}?key=TTDVDB34E28EX6VBQV5WBNAZ2`).then((response) => {
 
-        if (!response.ok) {
-            throw new Error("failed to fetch..", response.status);
-        }
         return response.json()
+
     }).catch((error) => {
-        console.error(error.message);
-        return false
+        showErrorImage();
+        const myError = `${error.message}: check your connection and try again!!`
+        notyf.error(myError);
+
     }).finally(() => {
         spinner.stopSpinner()
     })
@@ -54,14 +56,13 @@ export const fetchWeatherWithCityName = async (cityName) => {
 
     const weather = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${cityName}?key=TTDVDB34E28EX6VBQV5WBNAZ2`).then((response) => {
 
-        if (!response.ok) {
-            throw new Error("failed to fetch...");
-        }
         return response.json();
 
     }).catch((error) => {
-        console.error(error.message);
-        return false;
+
+        showErrorImage();
+        notyf.error(error.message);
+
     }).finally(() => {
         spinner.stopSpinner()
     })

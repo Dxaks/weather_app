@@ -1,9 +1,10 @@
 import "./cssStyle/default.css";
 import { fetchCurrentLocation, fetchWeatherWithCurrentLocation, fetchWeatherWithCityName, getWeather } from "./appLogic/weather.js";
 import { processData } from "./appLogic/processData.js";
-import { renderWeatherData, renderDailyTemp, renderHourlyTemp } from "./dom/domFunctions.js";
-import { loadWeatherIcon, filterhours } from "./utils/util.js";
+import { renderWeatherData, renderDailyTemp, renderHourlyTemp, showActiveNavBtn, showErrorImage, addTempUnitChangerElement} from "./dom/domFunctions.js";
+import { loadWeatherIcon, filterhours, activeNightMode, switchTempUnit } from "./utils/util.js";
 import { spinner } from "./dom/spinner.js";
+import { notyf } from "./dom/notyf.js";
 
 
 init()
@@ -12,18 +13,28 @@ clickHandler();
 
 function init() {
     document.addEventListener('DOMContentLoaded', async () => {
-
+        showActiveNavBtn();
+        tempUnitChangerHandler();
         spinner.initialize();
+        spinner.loadSpinner()
+        const location = await fetchCurrentLocation()
 
-        const location = await fetchCurrentLocation().catch((responseError) => {
-            console.error(`Error code ${responseError.code}: ${responseError.message}`)
-            return false;
-        });
+            .catch((responseError) => {
+                showErrorImage()
+                notyf.error(`Failed to load location ${responseError.message}`);
+        })
+            .finally(() => {
+                spinner.stopSpinner()
+            });
+
+        if (!location) return
 
         if (!location || location.accuracy > 5000) {
             const searchValue = document.querySelector('.searchBar');
             searchValue.focus();
         }
+
+        if (location.accuracy > 5000) notyf.error('we could not resolve your accurate location, use manual search') 
 
         const weatherData = await fetchWeatherWithCurrentLocation(location.latitude, location.longitude);
 
@@ -62,9 +73,12 @@ function clickHandler() {
             dataSaver.setData(data)
         }
 
+        
+        const data = dataSaver.getData()
+        
+        if (data) {
 
-        if (event.closest('.today')) {
-            const data = dataSaver.getData()
+            if (event.closest('.today')) {
             renderWeatherData(data);
         }
 
@@ -79,7 +93,26 @@ function clickHandler() {
             renderHourlyTemp(hourlyData);
         }
 
+        }
     } )
+}
+
+
+function tempUnitChangerHandler() {
+    addTempUnitChangerElement()
+    const select = document.querySelector('select');
+
+    select.addEventListener('change', () => {
+        
+        const tempUnit = select.value;
+        
+        const condition = document.querySelectorAll('.temp-conditions');
+        condition.forEach((element) => {
+            const value = parseFloat(element.textContent);
+            
+            element.innerHTML = `${switchTempUnit(tempUnit, value)}`;
+        })
+    })
 }
 
 
