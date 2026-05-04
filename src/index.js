@@ -1,8 +1,8 @@
 import "./cssStyle/default.css";
-import { fetchCurrentLocation, fetchWeatherWithCurrentLocation, fetchWeatherWithCityName, getWeather } from "./appLogic/weather.js";
+import { fetchCurrentLocation, fetchWeatherWithCurrentLocation, fetchWeatherWithCityName } from "./appLogic/weather.js";
 import { processData } from "./appLogic/processData.js";
 import { renderWeatherData, renderDailyTemp, renderHourlyTemp, showActiveNavBtn, showErrorImage, addTempUnitChangerElement} from "./dom/domFunctions.js";
-import { loadWeatherIcon, filterhours, activeNightMode, switchTempUnit } from "./utils/util.js";
+import { switchTempUnit } from "./utils/util.js";
 import { spinner } from "./dom/spinner.js";
 import { notyf } from "./dom/notyf.js";
 
@@ -125,7 +125,7 @@ function save() {
         data = weatherObject 
     }
 
-    function getData(weatherObject) {
+    function getData() {
         return data;
     }
 

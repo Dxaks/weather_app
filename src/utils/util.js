@@ -22,7 +22,7 @@ export async function loadWeatherIcon(icon) {
 
     const image = await import(`../image/${color}/${icon}.svg`)
     .then(icon => icon.default)
-    .catch((error) => {
+    .catch(() => {
         return "../image/1st Set - Color/cloudy.svg";
     })
 

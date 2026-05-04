@@ -1,4 +1,4 @@
-import { clearDiv, loadWeatherIcon, myDateFormatter, convertFehToCel, filterhours, switchTempUnit } from "../utils/util.js";
+import { clearDiv, loadWeatherIcon, myDateFormatter, filterhours } from "../utils/util.js";
 
 export async function renderWeatherData(weather) {
     if (!weather) return;
